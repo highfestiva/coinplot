@@ -1,0 +1,65 @@
+<html>
+<head>
+  <title>Coin Plotter</title>
+  <style>
+    body { background: #222; }
+  </style>
+  <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.css" type="text/css">
+  <link rel="stylesheet" href="/static/main.css" type="text/css">
+  <script src="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+  <div class="pickers">
+    <div class="interval-pick">
+      <select size="10">
+        <option value="1m">1m</option>
+        <option value="5m">5m</option>
+        <option value="15m" selected>15m</option>
+        <option value="30m">30m</option>
+        <option value="1h">1h</option>
+        <option value="2h">2h</option>
+        <option value="4h">4h</option>
+        <option value="6h">6h</option>
+        <option value="12h">12h</option>
+        <option value="1d">1d</option>
+      </select>
+    </div>
+    <div class="coin-pick">
+      <select size="20">
+        <option value="BTC_USDT" selected>BitCoin</option>
+        <option value="IOTA_BTC">Iota</option>
+        <option value="DASH_BTC">Dash</option>
+        <option value="LTC_BTC">LiteCoin</option>
+        <option value="ETH_BTC">Ethereum</option>
+        <option value="ETC_BTC">Ethereum Classic</option>
+        <option value="MANA_BTC">Decentraland</option>
+        <option value="XRP_BTC">Ripple</option>
+      </select>
+    </div>
+    <div class="to-currency-pick">
+      <select size="5">
+        <option value="USDT">U$</option>
+        <option value="BTC" selected>BitCoin</option>
+        <option value="ETH">Ethereum</option>
+      </select>
+    </div>
+  </div>
+  <div class="coin-chart">
+    <div class="chart">
+    </div>
+  </div>
+  <script>
+    $('select').change(function(e) {
+      $('.coin-chart').addClass('faded');
+      var interval = $('.interval-pick select').find(":selected").val();
+      var coin = $('.coin-pick select').find(":selected").val();
+      var toCurrency = $('.to-currency-pick select').find(":selected").val();
+      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval;
+      $('.chart').load(url, function() {
+        $('.coin-chart').removeClass('faded');
+      });
+    });
+  </script>
+</body>
+<html>

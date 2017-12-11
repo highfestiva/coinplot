@@ -1,0 +1,26 @@
+body {
+	overflow: hidden;
+}
+.pickers {
+	float: left;
+	width: 15%;
+	margin-top: 30px;
+}
+.interval-pick, .coin-pick, .to-currency-pick {
+	margin: 5px;
+}
+.coin-chart {
+	width: 80%;
+	margin: 5px;
+	float: right;
+}
+select {
+	width: 100%;
+	background-color: #222;
+	color: whitesmoke;
+	opacity: 0.5;
+	overflow: hidden;
+}
+.faded {
+	opacity: 0.2;
+}
