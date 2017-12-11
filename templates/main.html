@@ -44,22 +44,31 @@
         <option value="ETH">Ethereum</option>
       </select>
     </div>
+    <label><input class="log" type="checkbox"/>Log</label>
   </div>
   <div class="coin-chart">
     <div class="chart">
     </div>
   </div>
   <script>
-    $('select').change(function(e) {
+    function loadSelected() {
       $('.coin-chart').addClass('faded');
       var interval = $('.interval-pick select').find(":selected").val();
+      var log = $('input').is(':checked');
       var coin = $('.coin-pick select').find(":selected").val();
       var toCurrency = $('.to-currency-pick select').find(":selected").val();
-      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval;
+      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log;
       $('.chart').load(url, function() {
         $('.coin-chart').removeClass('faded');
       });
+    }
+    $('select').change(function(e) {
+      loadSelected();
     });
+    $('input').change(function(e) {
+      loadSelected();
+    });
+    loadSelected();
   </script>
 </body>
 <html>
