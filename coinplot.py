@@ -35,6 +35,11 @@ def currency(currency='BTC_USDT', to_currency='USDT'):
             symbol = 'BTCUSDT'
         url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}'.format(interval=interval, symbol=symbol)
         to_df = read_frame(url)
+        rows = min(len(df), len(to_df))
+        if len(df) > rows:
+            df = df.iloc[-rows:].reset_index(drop=True)
+        if len(to_df) > rows:
+            to_df = to_df.iloc[-rows:].reset_index(drop=True)
         if fwd:
             df['open'] /= to_df['open']
             df['hi'] /= to_df['hi']
