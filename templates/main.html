@@ -35,6 +35,18 @@
         <option value="ETC_BTC">Ethereum Classic</option>
         <option value="MANA_BTC">Decentraland</option>
         <option value="XRP_BTC">Ripple</option>
+        <option value="ARK_BTC">Ark</option>
+        <option value="SALT_BTC">Salt</option>
+        <option value="ZRX_BTC">Zrx</option>
+        <option value="ENJ_BTC">EnjinCoin</option>
+        <option value="MTL_BTC">Metal</option>
+        <option value="YOYO_BTC">Yoyow</option>
+        <option value="FUN_BTC">Funfair</option>
+        <option value="TRX_BTC">Tron</option>
+        <option value="KMD_BTC">Komodo</option>
+        <option value="FUEL_BTC">EtherParty</option>
+        <option value="AMB_BTC">Amber</option>
+        <option value="POE_BTC">Po.et</option>
       </select>
     </div>
     <div class="to-currency-pick">
@@ -45,6 +57,7 @@
       </select>
     </div>
     <label><input class="log" type="checkbox"/>Log</label>
+    <label><input class="line" type="checkbox"/>Line</label>
   </div>
   <div class="coin-chart">
     <div class="chart">
@@ -54,10 +67,11 @@
     function loadSelected() {
       $('.coin-chart').addClass('faded');
       var interval = $('.interval-pick select').find(":selected").val();
-      var log = $('input').is(':checked');
+      var log = $('input.log').is(':checked');
+      var line = $('input.line').is(':checked');
       var coin = $('.coin-pick select').find(":selected").val();
       var toCurrency = $('.to-currency-pick select').find(":selected").val();
-      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log;
+      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log + '&line=' + line;
       $('.chart').load(url, function() {
         $('.coin-chart').removeClass('faded');
       });
