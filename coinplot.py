@@ -6,13 +6,12 @@ from bokeh.plotting import figure
 from bokeh.models import WheelZoomTool
 from bokeh.models.formatters import DatetimeTickFormatter
 from flask import Flask, request, render_template
-from flask_caching import Cache
+import functools
 import pandas as pd
 import requests
 
 
 app = Flask(__name__)
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 
 @app.route('/')
@@ -61,8 +60,7 @@ def currency(currency='BTC_USDT', to_currency='USDT'):
     return plot2html(df, title, interval, log, line)
 
 
-#@app.route('/cache/<url>')
-@cache.cached(timeout=7*60)
+@functools.lru_cache()
 def read_frame(url):
     print(url)
     data = requests.get(url).json()
