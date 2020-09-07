@@ -4,25 +4,25 @@
   <style>
     body { background: #222; }
   </style>
-  <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.css" type="text/css">
-  <link rel="stylesheet" href="/static/main.css" type="text/css">
+  <link rel="stylesheet" href="/static/coinplot.css" type="text/css">
   <script src="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
   <div class="pickers">
     <div class="interval-pick">
-      <select size="10">
+      <select size="11">
         <option value="1m">1m</option>
         <option value="5m">5m</option>
-        <option value="15m" selected>15m</option>
+        <option value="15m">15m</option>
         <option value="30m">30m</option>
         <option value="1h">1h</option>
         <option value="2h">2h</option>
         <option value="4h">4h</option>
         <option value="6h">6h</option>
         <option value="12h">12h</option>
-        <option value="1d">1d</option>
+        <option value="1d" selected>1d</option>
+        <option value="1w">1w</option>
       </select>
     </div>
     <div class="coin-pick">
@@ -54,13 +54,14 @@
     </div>
     <div class="to-currency-pick">
       <select size="5">
-        <option value="USDT">U$</option>
-        <option value="BTC" selected>BitCoin</option>
+        <option value="USDT" selected>USDT</option>
+        <option value="BTC">BitCoin</option>
         <option value="ETH">Ethereum</option>
       </select>
     </div>
     <label><input class="log" type="checkbox"/>Log</label>
     <label><input class="line" type="checkbox"/>Line</label>
+    <label><input class="ma" type="checkbox"/>MA</label>
   </div>
   <div class="coin-chart">
     <div class="chart">
@@ -72,9 +73,11 @@
       var interval = $('.interval-pick select').find(":selected").val();
       var log = $('input.log').is(':checked');
       var line = $('input.line').is(':checked');
+      var ma = $('input.ma').is(':checked');
       var coin = $('.coin-pick select').find(":selected").val();
       var toCurrency = $('.to-currency-pick select').find(":selected").val();
-      var url = '/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log + '&line=' + line;
+      var dst = -(new Date()).getTimezoneOffset();
+      var url = '{{fetchpath}}/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log + '&line=' + line + '&ma=' + ma + '&dst=' + dst;
       $('.chart').load(url, function() {
         $('.coin-chart').removeClass('faded');
       });

@@ -1,26 +1,16 @@
-#!/usr/bin/env python3
-
-import bokeh
 from bokeh.embed import components as plot_html
 from bokeh.plotting import figure
 from bokeh.models import WheelZoomTool
 from bokeh.models.formatters import DatetimeTickFormatter
-from flask import Flask, request, render_template
+import bokeh.palettes
+from flask import request
 import functools
 import pandas as pd
 import requests
+from time import time
 
 
-app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    return render_template('main.html', bokeh_version=bokeh.__version__)
-
-
-@app.route('/<currency>/<to_currency>')
-def currency(currency='BTC_USDT', to_currency='USDT'):
+def plot(currency='BTC_USDT', to_currency='USDT'):
     from_cur,in_cur = currency.split('_')
     symbol = currency.replace('_', '')
     interval = request.values.get('interval', '15m')
@@ -28,8 +18,12 @@ def currency(currency='BTC_USDT', to_currency='USDT'):
     log = log in ('true', '1', 'on', 'yes', 'y')
     line = request.values.get('line', 'false')
     line = line in ('true', '1', 'on', 'yes', 'y')
+    ma = request.values.get('ma', 'false')
+    ma = ma in ('true', '1', 'on', 'yes', 'y')
+    dst_mins = int(request.values.get('dst', '0'))
+    hour = time()//60//60
     url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}'.format(interval=interval, symbol=symbol)
-    df = read_frame(url)
+    df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
     if in_cur != to_currency and from_cur != to_currency:
         fwd = in_cur in ('USDT', 'BTC')
         symbol = (to_currency + in_cur) if fwd else (in_cur + to_currency)
@@ -37,7 +31,7 @@ def currency(currency='BTC_USDT', to_currency='USDT'):
             fwd = not fwd
             symbol = 'BTCUSDT'
         url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}'.format(interval=interval, symbol=symbol)
-        to_df = read_frame(url)
+        to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
         rows = min(len(df), len(to_df))
         if len(df) > rows:
             df = df.iloc[-rows:].reset_index(drop=True)
@@ -57,14 +51,16 @@ def currency(currency='BTC_USDT', to_currency='USDT'):
         to_currency = in_cur
 
     title = from_cur + '/' + to_currency
-    return plot2html(df, title, interval, log, line)
+    return plot2html(df, title, interval, log, line, ma)
 
 
-@functools.lru_cache()
-def read_frame(url):
+@functools.lru_cache(maxsize=5)
+def read_frame(url, time_zone_offset, **kwargs):
     print(url)
     data = requests.get(url).json()
     df = pd.DataFrame(data, columns='time open hi lo close vol time_close a b c d e'.split())
+    if time_zone_offset:
+        df['time'] += time_zone_offset * 60 * 1000
     df = df.astype(dtype = {
             'open':  'float64',
             'close': 'float64',
@@ -74,12 +70,10 @@ def read_frame(url):
     return df
 
 
-def plot2html(df, title, interval, log, line):
+def plot2html(df, title, interval, log, line, ma):
     df = df.iloc[1:]
     up = df.close > df.open
     dn = df.open  > df.close
-    ma12 = df.close.rolling(12).mean()
-    ma26 = df.close.rolling(26).mean()
 
     kwargs = dict(
             title = title,
@@ -115,23 +109,22 @@ def plot2html(df, title, interval, log, line):
     else:
         pass
 
-    plot.line(df.time, ma12, color='#ffee33', legend='ma-12')
-    plot.line(df.time, ma26, color='#3355ff', legend='ma-26')
+    if ma:
+        for i,n in enumerate([50, 200]):
+            dma = df.close.rolling(n).mean()
+            col = bokeh.palettes.Category20[20][i%20]
+            plot.line(df.time, dma, color=col, legend_label='MA-%i'%n)
+        plot.legend.background_fill_color = '#222222'
+        plot.legend.background_fill_alpha = 0.6
+        plot.legend.label_text_color = 'whitesmoke'
 
     if not line:
-        totime = {'1m':60, '5m':5*60, '15m':15*60, '30m':30*60, '1h':60*60, '2h':2*60*60, '4h':4*60*60, '6h':6*60*60, '12h':12*60*60, '1d':24*60*60}
+        totime = {'1m':60, '5m':5*60, '15m':15*60, '30m':30*60, '1h':60*60, '2h':2*60*60, '4h':4*60*60, '6h':6*60*60, '12h':12*60*60, '1d':24*60*60, '1w':7*24*60*60}
         w = totime[interval] * 0.7 * 1000
         plot.segment(df.time[up], df.hi[up], df.time[up], df.lo[up], color='#33dd99')
         plot.segment(df.time[dn], df.hi[dn], df.time[dn], df.lo[dn], color='#ff8866')
         plot.vbar(df.time[up], w, df.open[up], df.close[up], fill_color='#558866', line_color='#33dd99')
         plot.vbar(df.time[dn], w, df.open[dn], df.close[dn], fill_color='#cc9988', line_color='#ff8866')
 
-    plot.legend.background_fill_color = '#222222'
-    plot.legend.background_fill_alpha = 0.6
-    plot.legend.label_text_color = 'whitesmoke'
-
     script,div = plot_html(plot)
     return div + script
-
-
-app.run(host='0.0.0.0', port=5000, threaded=True)
