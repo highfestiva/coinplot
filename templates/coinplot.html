@@ -4,91 +4,103 @@
   <style>
     body { background: #222; }
   </style>
+  <meta name="viewport" content="initial-scale=1.0">
   <link rel="stylesheet" href="/static/coinplot.css" type="text/css">
   <script src="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-  <div class="pickers">
-    <div class="interval-pick">
-      <select size="11">
-        <option value="1m">1m</option>
-        <option value="5m">5m</option>
-        <option value="15m">15m</option>
-        <option value="30m">30m</option>
-        <option value="1h">1h</option>
-        <option value="2h">2h</option>
-        <option value="4h">4h</option>
-        <option value="6h">6h</option>
-        <option value="12h">12h</option>
-        <option value="1d" selected>1d</option>
-        <option value="1w">1w</option>
-      </select>
+  <div class="container">
+    <div class="pickers">
+      <div class="interval-pick">
+        <select size="11">
+          <option value="1m">1m</option>
+          <option value="5m">5m</option>
+          <option value="15m">15m</option>
+          <option value="30m">30m</option>
+          <option value="1h">1h</option>
+          <option value="2h">2h</option>
+          <option value="4h">4h</option>
+          <option value="6h">6h</option>
+          <option value="12h">12h</option>
+          <option value="1d" selected>1d</option>
+          <option value="1w">1w</option>
+        </select>
+      </div>
+      <div class="coin-pick">
+        <select size="25">
+          <option value="BTC_USDT" selected>BitCoin</option>
+          <option value="IOTA_BTC">Iota</option>
+          <option value="DASH_BTC">Dash</option>
+          <option value="LTC_BTC">LiteCoin</option>
+          <option value="ETH_BTC">Ethereum</option>
+          <option value="ETC_BTC">Ethereum Classic</option>
+          <option value="MANA_BTC">Decentraland</option>
+          <option value="XRP_BTC">Ripple</option>
+          <option value="ARK_BTC">Ark</option>
+          <option value="SALT_BTC">Salt</option>
+          <option value="ZRX_BTC">Zrx</option>
+          <option value="ENJ_BTC">EnjinCoin</option>
+          <option value="MTL_BTC">Metal</option>
+          <option value="YOYO_BTC">Yoyow</option>
+          <option value="FUN_BTC">Funfair</option>
+          <option value="TRX_BTC">Tron</option>
+          <option value="KMD_BTC">Komodo</option>
+          <option value="FUEL_BTC">EtherParty</option>
+          <option value="AMB_BTC">Amber</option>
+          <option value="POE_BTC">Po.et</option>
+          <option value="XVG_BTC">Verge</option>
+          <option value="SUB_BTC">Substratum</option>
+          <option value="ENG_BTC">Enigma</option>
+        </select>
+      </div>
+      <div class="to-currency-pick">
+        <select size="5">
+          <option value="USDT" selected>USDT</option>
+          <option value="BTC">BitCoin</option>
+          <option value="ETH">Ethereum</option>
+        </select>
+      </div>
+      <label><input class="log" type="checkbox"/>Log</label>
+      <label><input class="line" type="checkbox"/>Line</label>
+      <label><input class="ma" type="checkbox"/>MA</label>
     </div>
-    <div class="coin-pick">
-      <select size="25">
-        <option value="BTC_USDT" selected>BitCoin</option>
-        <option value="IOTA_BTC">Iota</option>
-        <option value="DASH_BTC">Dash</option>
-        <option value="LTC_BTC">LiteCoin</option>
-        <option value="ETH_BTC">Ethereum</option>
-        <option value="ETC_BTC">Ethereum Classic</option>
-        <option value="MANA_BTC">Decentraland</option>
-        <option value="XRP_BTC">Ripple</option>
-        <option value="ARK_BTC">Ark</option>
-        <option value="SALT_BTC">Salt</option>
-        <option value="ZRX_BTC">Zrx</option>
-        <option value="ENJ_BTC">EnjinCoin</option>
-        <option value="MTL_BTC">Metal</option>
-        <option value="YOYO_BTC">Yoyow</option>
-        <option value="FUN_BTC">Funfair</option>
-        <option value="TRX_BTC">Tron</option>
-        <option value="KMD_BTC">Komodo</option>
-        <option value="FUEL_BTC">EtherParty</option>
-        <option value="AMB_BTC">Amber</option>
-        <option value="POE_BTC">Po.et</option>
-        <option value="XVG_BTC">Verge</option>
-        <option value="SUB_BTC">Substratum</option>
-        <option value="ENG_BTC">Enigma</option>
-      </select>
+    <div class="coin-chart">
+      <div class="chart">
+      </div>
     </div>
-    <div class="to-currency-pick">
-      <select size="5">
-        <option value="USDT" selected>USDT</option>
-        <option value="BTC">BitCoin</option>
-        <option value="ETH">Ethereum</option>
-      </select>
-    </div>
-    <label><input class="log" type="checkbox"/>Log</label>
-    <label><input class="line" type="checkbox"/>Line</label>
-    <label><input class="ma" type="checkbox"/>MA</label>
-  </div>
-  <div class="coin-chart">
-    <div class="chart">
+    <div class="mobile-selector">
+      <input id="r1" class="radio" type="radio" name="mtime"/>
+      <label for="r1" class="first-radio">15m</label>
+      <input id="r2" class="radio" type="radio" name="mtime"/>
+      <label for="r2" class="middle-radio">1h</label>
+      <input id="r3" class="radio" type="radio" name="mtime" checked="checked"/>
+      <label for="r3" class="last-radio">1d</label>
     </div>
   </div>
   <script>
-    function loadSelected() {
-      $('.coin-chart').addClass('faded');
-      var interval = $('.interval-pick select').find(":selected").val();
-      var log = $('input.log').is(':checked');
-      var line = $('input.line').is(':checked');
-      var ma = $('input.ma').is(':checked');
-      var coin = $('.coin-pick select').find(":selected").val();
-      var toCurrency = $('.to-currency-pick select').find(":selected").val();
+    function loadInterval(interval) {
+      $(".coin-chart").addClass("faded");
+      var log = $("input.log").is(":checked");
+      var line = $("input.line").is(":checked");
+      var ma = $("input.ma").is(":checked");
+      var coin = $(".coin-pick select").find(":selected").val();
+      var toCurrency = $(".to-currency-pick select").find(":selected").val();
       var dst = -(new Date()).getTimezoneOffset();
-      var url = '{{fetchpath}}/' + coin + '/' + toCurrency + '?interval=' + interval + '&log=' + log + '&line=' + line + '&ma=' + ma + '&dst=' + dst;
-      $('.chart').load(url, function() {
-        $('.coin-chart').removeClass('faded');
+      var url = "{{fetchpath}}/" + coin + "/" + toCurrency + "?interval=" + interval + "&log=" + log + "&line=" + line + "&ma=" + ma + "&dst=" + dst;
+      $(".chart").load(url, function() {
+        $(".coin-chart").removeClass("faded");
       });
     }
-    $('select').change(function(e) {
-      loadSelected();
+    $("select").change(function(e) {
+      var interval = $(".interval-pick select").find(":selected").val();
+      loadInterval(interval);
     });
-    $('input').change(function(e) {
-      loadSelected();
+    $("input").change(function(e) {
+      var interval = $(".radio:checked").next().text();
+      loadInterval(interval);
     });
-    loadSelected();
+    loadInterval("1d");
   </script>
 </body>
 <html>

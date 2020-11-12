@@ -10,6 +10,9 @@ import requests
 from time import time
 
 
+candles = 150
+
+
 def plot(currency='BTC_USDT', to_currency='USDT'):
     from_cur,in_cur = currency.split('_')
     symbol = currency.replace('_', '')
@@ -22,7 +25,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
     ma = ma in ('true', '1', 'on', 'yes', 'y')
     dst_mins = int(request.values.get('dst', '0'))
     hour = time()//60//60
-    url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}'.format(interval=interval, symbol=symbol)
+    url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=candles)
     df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
     if in_cur != to_currency and from_cur != to_currency:
         fwd = in_cur in ('USDT', 'BTC')
@@ -30,7 +33,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
         if symbol == 'USDTBTC':
             fwd = not fwd
             symbol = 'BTCUSDT'
-        url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}'.format(interval=interval, symbol=symbol)
+        url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=candles)
         to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
         rows = min(len(df), len(to_df))
         if len(df) > rows:
@@ -78,10 +81,10 @@ def plot2html(df, title, interval, log, line, ma):
     kwargs = dict(
             title = title,
             tools = 'xpan, xwheel_zoom, box_zoom, reset',
-            sizing_mode = 'scale_width')
+            active_drag = 'box_zoom')
     if log:
         kwargs['y_axis_type'] = 'log'
-    plot = figure(x_axis_type='datetime', plot_width=1000, plot_height=500, **kwargs)
+    plot = figure(x_axis_type='datetime', sizing_mode='stretch_both', **kwargs)
     plot.toolbar.active_scroll = plot.select_one(WheelZoomTool)
     plot.background_fill_alpha = 0
     plot.border_fill_alpha = 0

@@ -1,8 +1,13 @@
 body {
 	overflow: auto;
 }
+.container {
+	height: 100%;
+	display: flex;
+	flex-flow: row;
+}
 .pickers {
-	float: left;
+	flex: 0 0 15%;
 	width: 15%;
 	margin-top: 30px;
 }
@@ -10,9 +15,13 @@ body {
 	margin: 7px;
 }
 .coin-chart {
+	flex: 0 0 83%;
 	width: 83%;
+	height: 100%;
 	margin: 9px;
-	float: right;
+}
+.chart {
+	height: 99%;
 }
 select {
 	width: 100%;
@@ -30,4 +39,61 @@ select, input, label {
 }
 .faded {
 	opacity: 0.2;
+}
+.mobile-selector {
+	display: none;
+}
+
+
+@media only screen and (min-resolution: 2dppx) {
+
+.container {
+	display: flex;
+	flex-flow: column;
+}
+.pickers {
+	width: auto;
+	display: none;
+}
+.coin-chart {
+    width: 100%;
+    margin: 0;
+	float: none;
+	flex: 1 1 auto;
+}
+.mobile-selector {
+	margin: 0.5em;
+	display: block;
+	text-align: right;
+}
+.mobile-selector label {
+	border-radius: 0.3em;
+	border: 3px solid #1f4a54;
+	margin: 0 -4px;
+	padding: 0.2em;
+	text-align: center;
+	min-width: 4em;
+	display: inline-block;
+}
+label.first-radio {
+	border-right: 0;
+	border-radius: 0.3em 0 0 0.3em;
+}
+label.last-radio {
+	border-left: 0;
+	border-radius: 0 0.3em 0.3em 0;
+}
+label.middle-radio {
+	border-radius: 0;
+}
+.radio {
+	width: 0;
+	opacity: 0;
+	padding: 0;
+	margin: 0;
+}
+.radio:checked + label {
+    background: #1f4a54;
+}
+
 }
