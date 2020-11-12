@@ -1,5 +1,7 @@
 body {
 	overflow: auto;
+  margin: 0;
+  padding: 0;
 }
 .container {
 	height: 100%;
@@ -45,7 +47,8 @@ select, input, label {
 }
 
 
-@media only screen and (min-resolution: 2dppx) {
+@media (min-resolution: 2dppx),
+       (-webkit-min-device-pixel-ratio: 2) {
 
 .container {
 	display: flex;
@@ -62,7 +65,7 @@ select, input, label {
 	flex: 1 1 auto;
 }
 .mobile-selector {
-	margin: 0.5em;
+	margin: 0 2.4em 1em 0;
 	display: block;
 	text-align: right;
 }

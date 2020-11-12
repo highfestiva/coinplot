@@ -102,7 +102,7 @@ def plot2html(df, title, interval, log, line, ma):
     dtf.milliseconds = ['%T']
     dtf.seconds = dtf.minsec = ['%T']
     dtf.hours = dtf.hourmin = dtf.minutes = ['%R']
-    dtf.days = ['%R %a %b %e']
+    dtf.days = ['%F']
     dtf.months = ['%F']
     dtf.years = ['%F']
     plot.xaxis.formatter = dtf
