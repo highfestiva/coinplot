@@ -50,53 +50,48 @@ select, input, label {
 @media (min-resolution: 2dppx),
        (-webkit-min-device-pixel-ratio: 2) {
 
-.container {
-	display: flex;
-	flex-flow: column;
-}
 .pickers {
-	width: auto;
 	display: none;
 }
 .coin-chart {
-    width: 100%;
-    margin: 0;
-	float: none;
+	width: 100%;
+	height: 100%;
+	margin: 0;
 	flex: 1 1 auto;
 }
+.chart {
+	height: 100%;
+}
 .mobile-selector {
-	margin: 0 2.4em 1em 0;
+	margin: 0;
+	padding: 0;
 	display: block;
-	text-align: right;
+	position: fixed;
+	bottom: 34px;
+	right: 0;
 }
 .mobile-selector label {
-	border-radius: 0.3em;
-	border: 3px solid #1f4a54;
-	margin: 0 -4px;
-	padding: 0.2em;
+	border-left: 2px solid rgba(0,0,0,0);
+	font-family: 'Bahnschrift Light Condensed', 'Yu Gothic Light', sans-serif;
+	font-size: 11px;
+	width: 28px;
+	height: 27px;
+	display: block;
+	position: relative;
+	left: 0px;
+	padding-top: 7px;
+	background: rgb(0,0,0,0);
 	text-align: center;
-	min-width: 4em;
-	display: inline-block;
-}
-label.first-radio {
-	border-right: 0;
-	border-radius: 0.3em 0 0 0.3em;
-}
-label.last-radio {
-	border-left: 0;
-	border-radius: 0 0.3em 0.3em 0;
-}
-label.middle-radio {
-	border-radius: 0;
 }
 .radio {
 	width: 0;
+	height: 0;
 	opacity: 0;
 	padding: 0;
 	margin: 0;
 }
 .radio:checked + label {
-    background: #1f4a54;
+    border-left: 2px solid #26aae1;
 }
 
 }
