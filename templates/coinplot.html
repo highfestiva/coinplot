@@ -92,11 +92,11 @@
         $(".coin-chart").removeClass("faded");
       });
     }
-    $("select").change(function(e) {
+    $("select, input:checkbox").change(function(e) {
       var interval = $(".interval-pick select").find(":selected").val();
       loadInterval(interval);
     });
-    $("input").change(function(e) {
+    $('input:radio').change(function(e) {
       var interval = $(".radio:checked").next().text();
       loadInterval(interval);
     });
