@@ -1,7 +1,8 @@
-body {
-	overflow: auto;
-  margin: 0;
-  padding: 0;
+html, body {
+	overflow: hidden;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 .container {
 	height: 100%;
@@ -91,7 +92,7 @@ select, input, label {
 	margin: 0;
 }
 .radio:checked + label {
-    border-left: 2px solid #26aae1;
+	border-left: 2px solid #26aae1;
 }
 
 }
