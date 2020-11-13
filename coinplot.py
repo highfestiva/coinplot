@@ -11,6 +11,7 @@ from time import time
 
 
 candles = 150
+candles_with_ma = 1000
 
 
 def plot(currency='BTC_USDT', to_currency='USDT'):
@@ -23,9 +24,10 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
     line = line in ('true', '1', 'on', 'yes', 'y')
     ma = request.values.get('ma', 'false')
     ma = ma in ('true', '1', 'on', 'yes', 'y')
+    limit = candles_with_ma if ma else candles
     dst_mins = int(request.values.get('dst', '0'))
     hour = time()//60//60
-    url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=candles)
+    url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=limit)
     df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
     if in_cur != to_currency and from_cur != to_currency:
         fwd = in_cur in ('USDT', 'BTC')
@@ -33,7 +35,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
         if symbol == 'USDTBTC':
             fwd = not fwd
             symbol = 'BTCUSDT'
-        url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=candles)
+        url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=limit)
         to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
         rows = min(len(df), len(to_df))
         if len(df) > rows:
