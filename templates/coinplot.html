@@ -30,11 +30,11 @@
       <div class="coin-pick">
         <select size="25">
           <option value="BTC_USDT" selected>BitCoin</option>
+          <option value="ETH_BTC">Ethereum</option>
+          <option value="ETC_BTC">Ethereum Classic</option>
           <option value="IOTA_BTC">Iota</option>
           <option value="DASH_BTC">Dash</option>
           <option value="LTC_BTC">LiteCoin</option>
-          <option value="ETH_BTC">Ethereum</option>
-          <option value="ETC_BTC">Ethereum Classic</option>
           <option value="MANA_BTC">Decentraland</option>
           <option value="XRP_BTC">Ripple</option>
           <option value="ARK_BTC">Ark</option>
@@ -70,12 +70,17 @@
       </div>
     </div>
     <div class="mobile-selector">
-      <input id="r1" class="radio" type="radio" name="mtime"/>
-      <label for="r1" class="first-radio">15m</label>
-      <input id="r2" class="radio" type="radio" name="mtime"/>
-      <label for="r2" class="middle-radio">1h</label>
-      <input id="r3" class="radio" type="radio" name="mtime" checked="checked"/>
-      <label for="r3" class="last-radio">1d</label>
+      <input id="c1" class="cradio" type="radio" name="coin" checked="checked"/>
+      <label for="c1" class="first-radio">B</label>
+      <input id="c2" class="cradio" type="radio" name="coin"/>
+      <label for="c2" class="second-radio">E</label>
+
+      <input id="t1" class="tradio" type="radio" name="mtime"/>
+      <label for="t1" class="first-radio">15m</label>
+      <input id="t2" class="tradio" type="radio" name="mtime"/>
+      <label for="t2" class="middle-radio">1h</label>
+      <input id="t3" class="tradio" type="radio" name="mtime" checked="checked"/>
+      <label for="t3" class="last-radio">1d</label>
     </div>
   </div>
   <script>
@@ -96,8 +101,18 @@
       var interval = $(".interval-pick select").find(":selected").val();
       loadInterval(interval);
     });
-    $('input:radio').change(function(e) {
-      var interval = $(".radio:checked").next().text();
+    $('input:radio.cradio').change(function(e) {
+      var coin = $(".cradio:checked").next().text();
+      if (coin == "B") {
+        $(".coin-pick select").val("BTC_USDT");
+      } else if (coin == "E") {
+        $(".coin-pick select").val("ETH_BTC");
+      }
+      var interval = $(".tradio:checked").next().text();
+      loadInterval(interval);
+    });
+    $('input:radio.tradio').change(function(e) {
+      var interval = $(".tradio:checked").next().text();
       loadInterval(interval);
     });
     loadInterval("1d");

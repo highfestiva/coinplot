@@ -28,7 +28,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
     dst_mins = int(request.values.get('dst', '0'))
     hour = time()//60//60
     url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=limit)
-    df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
+    df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour).copy()
     if in_cur != to_currency and from_cur != to_currency:
         fwd = in_cur in ('USDT', 'BTC')
         symbol = (to_currency + in_cur) if fwd else (in_cur + to_currency)
@@ -36,7 +36,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
             fwd = not fwd
             symbol = 'BTCUSDT'
         url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=limit)
-        to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour)
+        to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour).copy()
         rows = min(len(df), len(to_df))
         if len(df) > rows:
             df = df.iloc[-rows:].reset_index(drop=True)

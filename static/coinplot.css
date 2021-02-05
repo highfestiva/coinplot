@@ -84,14 +84,14 @@ select, input, label {
 	background: rgb(0,0,0,0);
 	text-align: center;
 }
-.radio {
+input[type=radio] {
 	width: 0;
 	height: 0;
 	opacity: 0;
 	padding: 0;
 	margin: 0;
 }
-.radio:checked + label {
+input[type=radio]:checked + label {
 	border-left: 2px solid #26aae1;
 }
 
