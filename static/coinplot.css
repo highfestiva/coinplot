@@ -24,7 +24,7 @@ html, body {
 	margin: 9px;
 }
 .chart {
-	height: 99%;
+	height: 97%;
 }
 select {
 	width: 100%;
@@ -56,12 +56,8 @@ select, input, label {
 }
 .coin-chart {
 	width: 100%;
-	height: 100%;
 	margin: 0;
 	flex: 1 1 auto;
-}
-.chart {
-	height: 100%;
 }
 .mobile-selector {
 	margin: 0;
