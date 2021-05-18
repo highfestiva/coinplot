@@ -6,6 +6,9 @@
   </style>
   <meta name="viewport" content="initial-scale=1.0">
   <link rel="stylesheet" href="/static/coinplot.css" type="text/css">
+  {% if allow_mobile %}
+  <link rel="stylesheet" href="/static/coinplot-mobile.css" type="text/css">
+  {% endif %}
   <script src="https://cdn.pydata.org/bokeh/release/bokeh-{{bokeh_version}}.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
@@ -32,6 +35,7 @@
           <option value="BTC_USDT" selected>BitCoin</option>
           <option value="ETH_BTC">Ethereum</option>
           <option value="ETC_BTC">Ethereum Classic</option>
+          <option value="SRM_BTC">Serum</option>
           <option value="IOTA_BTC">Iota</option>
           <option value="DASH_BTC">Dash</option>
           <option value="LTC_BTC">LiteCoin</option>

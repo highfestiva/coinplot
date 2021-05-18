@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('coinplot.html', bokeh_version=bokeh.__version__, fetchpath='/coinplot')
+    return render_template('coinplot.html', bokeh_version=bokeh.__version__, fetchpath='/coinplot', allow_mobile=True)
 
 
 @app.route('/coinplot/<currency>/<to_currency>')
