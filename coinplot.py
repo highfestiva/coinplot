@@ -101,12 +101,12 @@ def plot2html(df, title, interval, log, line, ma):
     plot.xaxis.minor_tick_line_alpha = 0
     plot.yaxis.minor_tick_line_alpha = 0
     dtf = DatetimeTickFormatter()
-    dtf.milliseconds = ['%T']
-    dtf.seconds = dtf.minsec = ['%T']
-    dtf.hours = dtf.hourmin = dtf.minutes = ['%R']
-    dtf.days = ['%F']
-    dtf.months = ['%F']
-    dtf.years = ['%F']
+    dtf.milliseconds = '%T'
+    dtf.seconds = dtf.minsec = '%T'
+    dtf.hours = dtf.hourmin = dtf.minutes = '%R'
+    dtf.days = '%F'
+    dtf.months = '%F'
+    dtf.years = '%F'
     plot.xaxis.formatter = dtf
 
     if line:
