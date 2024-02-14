@@ -37,11 +37,8 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
             symbol = 'BTCUSDT'
         url = 'https://www.binance.com/api/v1/klines?interval={interval}&symbol={symbol}&limit={limit}'.format(interval=interval, symbol=symbol, limit=limit)
         to_df = read_frame(url, time_zone_offset=dst_mins, cache_t=hour).copy()
-        rows = min(len(df), len(to_df))
-        if len(df) > rows:
-            df = df.iloc[-rows:].reset_index(drop=True)
-        if len(to_df) > rows:
-            to_df = to_df.iloc[-rows:].reset_index(drop=True)
+        df = df.loc[to_df.index, :]
+        to_df = to_df.loc[df.index, :]
         if fwd:
             df['open'] /= to_df['open']
             df['hi'] /= to_df['hi']
@@ -54,7 +51,7 @@ def plot(currency='BTC_USDT', to_currency='USDT'):
             df['close'] *= to_df['close']
     else:
         to_currency = in_cur
-
+    df = df.reset_index()
     title = from_cur + '/' + to_currency
     return plot2html(df, title, interval, log, line, ma)
 
@@ -72,13 +69,14 @@ def read_frame(url, time_zone_offset, **kwargs):
             'hi':    'float64',
             'lo':    'float64',
             'time':  'datetime64[ms]'})
+    df = df.set_index('time')
     return df
 
 
 def plot2html(df, title, interval, log, line, ma):
     df = df.iloc[1:]
-    up = df.close > df.open
-    dn = df.open  > df.close
+    up = df.close >= df.open
+    dn = df.open  >  df.close
 
     kwargs = dict(
             title = title,
